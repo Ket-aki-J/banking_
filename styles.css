@@ -1,0 +1,135 @@
+/* styles.css */
+body {
+    font-family: 'Playfair Display'; /* Changed to a more common font */
+    background-color: #FFF5E1; /* Light cream background */
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: auto;
+    background: #fff; /* White background for the container */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #FF5733; /* Warm red color for headings */
+    margin-bottom: 20px;
+}
+
+h2 {
+    text-align: center;
+    color: #FF5733; /* Warm red color for subheadings */
+    margin-bottom: 15px;
+}
+
+.video-tutorial {
+    margin-bottom: 20px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+button {
+    background-color: #FF5733; /* Warm red button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #a93226; /* Darker red on hover */
+}
+
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.feature {
+    width: 45%;
+    margin: 10px 0;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    background-color: #f9f9f9; /* Light background for features */
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.feature img {
+    width: 80px; /* Adjust based on your images */
+    height: 80px; /* Adjust based on your images */
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.feature:hover {
+    transform: scale(1.05);
+    background-color: #dc0000; /* Highlight feature on hover */
+}
+
+.feature p {
+    margin-top: 5px;
+    font-weight: bold;
+    color: #333; /* Darker text for better readability */
+}
+
+.logout {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #a93226; /* Warm red for logout */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.logout:hover {
+    background-color: #c82333; /* Darker red on hover */
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+input[type="text"],
+input[type="password"] {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #a93226; /* Warm red border on focus */
+    outline: none;
+}
+
+a {
+    color: #a93226; /* Warm red for links */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline; /* Underline on hover */
+}

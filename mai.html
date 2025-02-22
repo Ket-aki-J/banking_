@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessible Banking</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --secondary-color: #1d4ed8;
+            --accent-color: #60a5fa;
+            --background-color: #f0f7ff;
+            --dark-background: #222;
+            --dark-text: #fff;
+            --light-text: #333;
+            --light-card: #fff;
+            --dark-card: #444;
+            --success-color: #22c55e;
+            --danger-color: #ef4444;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: var(--background-color);
+            color: var(--light-text);
+            transition: background 0.3s, color 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--light-card);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: background 0.3s;
+        }
+
+        input, button {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        .action-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            background: var(--primary-color);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 18px;
+            margin: 15px 0;
+        }
+
+        .action-button i {
+            font-size: 24px;
+        }
+
+        .action-button:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .withdraw-btn {
+            background: var(--danger-color);
+        }
+
+        .deposit-btn {
+            background: var(--success-color);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .dark-mode {
+            background: var(--dark-background);
+            color: var(--dark-text);
+        }
+
+        .dark-mode .container {
+            background: var(--dark-card);
+            box-shadow: none;
+        }
+
+        .language-toggle {
+            width: auto;
+            padding: 8px;
+        }
+
+        .transactions-list {
+            margin-top: 1rem;
+            text-align: left;
+            padding: 1rem;
+            border-radius: 8px;
+            background: rgba(0,0,0,0.05);
+        }
+
+        .transaction-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0.5rem 0;
+            padding: 0.8rem;
+            border-radius: 6px;
+            transition: all 0.3s;
+        }
+
+        .transaction-item i {
+            font-size: 20px;
+        }
+
+        .transaction-withdraw {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger-color);
+        }
+
+        .transaction-deposit {
+            background: rgba(34, 197, 94, 0.1);
+            color: var(--success-color);
+        }
+
+        .balance-display {
+            font-size: 24px;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 12px;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .dark-mode .balance-display {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--dark-text);
+        }
+
+        .tutorial-video {
+            margin: 20px 0;
+            width: 100%;
+            max-width: 600px;
+            border-radius: 8px;
+        }
+
+        .help-text {
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+        }
+
+        .dark-mode .help-text {
+            color: #aaa;
+        }
+
+        .currency-image {
+            width: 30px;
+            height: 30px;
+            margin-right: 5px;
+            vertical-align: middle;
+
+        }
+        .top-buttons {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 10px;
+            z-index: 1000;
+            display: flex;
+            justify-content: center; /* Center buttons horizontally */
+            align-items: center; /* Align vertically */
+            gap: 10px; /* Add space between buttons */
+            border-bottom: 2px solid #ccc;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="top-buttons">
+        <button id="readButton">🔊 Read Aloud</button>
+        <button id="stopButton">⏹ Stop</button>
+    
+    </div>
+    <div class="container" id="loginPage">
+        <h2 id="title"><i class="fas fa-user-lock"></i> Login</h2>
+        <button class="language-toggle" onclick="toggleLanguage()">English</button>
+        <div class="input-group">
+            <input type="text" id="accountNumber" placeholder="Account Number">
+            <p class="help-text">Enter your account number here</p>
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="Password">
+            <p class="help-text">Enter your secure password</p>
+        </div>
+        <button class="action-button" onclick="login()">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+        <p><a href="#" onclick="showSignUp()">Sign Up</a></p>
+    </div>
+    
+    <div class="container hidden" id="signUpPage">
+        <h2><i class="fas fa-user-plus"></i> Sign Up</h2>
+        <input type="text" placeholder="Account Number">
+        <input type="password" placeholder="Password">
+        <button class="action-button" onclick="signUp()">
+            <i class="fas fa-user-plus"></i> Sign Up
+        </button>
+        <p><a href="#" onclick="showLogin()">Back to Login</a></p>
+    </div>
+    
+    <div class="container hidden" id="dashboard">
+        <h2 id="welcome"><i class="fas fa-home"></i> Welcome!</h2>
+        <button class="language-toggle" onclick="toggleLanguage()">English</button>
+        
+        <div class="balance-display" id="balance">
+            <i class="fas fa-wallet"></i> Balance: $1000
+        </div>
+
+        <button class="action-button withdraw-btn" onclick="withdraw()" id="withdrawBtn">
+            <i class="fas fa-money-bill-wave"></i> Withdraw
+        </button>
+        <button class="action-button deposit-btn" onclick="deposit()" id="depositBtn">
+            <i class="fas fa-piggy-bank"></i> Deposit
+        </button>
+        <button class="action-button" onclick="transactionHistory()" id="historyBtn">
+            <i class="fas fa-history"></i> Transaction History
+        </button>
+        
+        <div id="transactions" class="hidden"></div>
+
+        <div class="tutorial-section">
+            <h3><i class="fas fa-graduation-cap"></i> How to use</h3>
+            <select id="tutorialLanguage" onchange="changeTutorialLanguage()">
+                <option value="en">English</option>
+                <option value="hi">हिंदी</option>
+                <option value="kn">ಕನ್ನಡ</option>
+            </select>
+            <video id="tutorialVideo" class="tutorial-video" controls>
+                <source src="" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <button class="action-button" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+        <button class="action-button" id="darkModeToggle" onclick="toggleMode()">
+            <i class="fas fa-moon"></i> Toggle Dark Mode
+        </button>
+    </div>
+    
+    <script>
+        let balance = 1000;
+        let transactions = [];
+        let languages = ["en", "kn", "hi"];
+        let currentLangIndex = 0;
+        
+        const tutorialVideos = {
+            en: "path_to_english_tutorial.mp4",
+            hi: "path_to_hindi_tutorial.mp4",
+            kn: "path_to_kannada_tutorial.mp4"
+        };
+
+        function changeTutorialLanguage() {
+            const lang = document.getElementById('tutorialLanguage').value;
+            document.getElementById('tutorialVideo').src = tutorialVideos[lang];
+        }
+
+        function toggleLanguage() {
+            currentLangIndex = (currentLangIndex + 1) % languages.length;
+            setLanguage(languages[currentLangIndex]);
+        }
+
+        function setLanguage(lang) {
+            const translations = {
+                en: { 
+                    login: "Login", 
+                    welcome: "Welcome!", 
+                    withdraw: "Withdraw", 
+                    deposit: "Deposit", 
+                    history: "Transaction History",
+                    balance: "Balance",
+                    withdrawText: "Withdraw",
+                    depositText: "Deposit"
+                },
+                kn: { 
+                    login: "ಲಾಗಿನ್", 
+                    welcome: "ಸ್ವಾಗತ!", 
+                    withdraw: "ಹಣ ತೆಗೆದುಕೊಳ್ಳಿ", 
+                    deposit: "ಹಣ ಜಮೆ ಮಾಡಿ", 
+                    history: "ವಹಿವಾಟು ಇತಿಹಾಸ",
+                    balance: "ಬ್ಯಾಲೆನ್ಸ್",
+                    withdrawText: "ಹಣ ತೆಗೆದುಕೊಳ್ಳಿ",
+                    depositText: "ಹಣ ಜಮೆ"
+                },
+                hi: { 
+                    login: "लॉगिन", 
+                    welcome: "स्वागत है!", 
+                    withdraw: "निकासी", 
+                    deposit: "जमा करें", 
+                    history: "लेन-देन इतिहास",
+                    balance: "शेष राशि",
+                    withdrawText: "निकासी",
+                    depositText: "जमा"
+                }
+            };
+            document.getElementById('title').innerHTML = `<i class="fas fa-user-lock"></i> ${translations[lang].login}`;
+            document.getElementById('welcome').innerHTML = `<i class="fas fa-home"></i> ${translations[lang].welcome}`;
+            document.getElementById('withdrawBtn').innerHTML = `<i class="fas fa-money-bill-wave"></i> ${translations[lang].withdraw}`;
+            document.getElementById('depositBtn').innerHTML = `<i class="fas fa-piggy-bank"></i> ${translations[lang].deposit}`;
+            document.getElementById('historyBtn').innerHTML = `<i class="fas fa-history"></i> ${translations[lang].history}`;
+            document.getElementById('balance').innerHTML = `<i class="fas fa-wallet"></i> ${translations[lang].balance}: $${balance}`;
+            document.querySelectorAll('.language-toggle').forEach(btn => btn.innerText = lang === "en" ? "English" : lang === "kn" ? "ಕನ್ನಡ" : "हिन्दी");
+            updateBalanceAndHistory(translations[lang]);
+        }
+
+        function login() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+        }
+        
+        function showSignUp() {
+    document.getElementById("loginPage").classList.add("hidden");
+    document.getElementById("signUpPage").classList.remove("hidden");
+}
+
+function showLogin() {
+    document.getElementById("signUpPage").classList.add("hidden");
+    document.getElementById("loginPage").classList.remove("hidden");
+}
+
+function signUp() {
+    const accountNumber = document.querySelector("#signUpPage input[type='text']").value;
+    const password = document.querySelector("#signUpPage input[type='password']").value;
+
+    if (accountNumber.trim() === "" || password.trim() === "") {
+        alert("Please enter both account number and password!");
+        return;
+    }
+
+    // Store account details in localStorage (for demo purposes, not secure)
+    localStorage.setItem("accountNumber", accountNumber);
+    localStorage.setItem("password", password);
+    alert("Sign-up successful! Please log in.");
+
+    // Redirect to login page
+    showLogin();
+}
+
+        function logout() {
+            document.getElementById('dashboard').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+        }
+
+        function withdraw() {
+            let amount = prompt("Enter amount to withdraw:");
+            if(amount > 0 && amount <= balance) {
+                balance -= amount;
+                transactions.push({type: 'withdraw', amount: amount, timestamp: new Date()});
+                updateBalanceAndHistory();
+            } else {
+                alert("Invalid amount or insufficient balance");
+            }
+        }
+
+        function deposit() {
+            let amount = prompt("Enter amount to deposit:");
+            if(amount > 0) {
+                balance += Number(amount);
+                transactions.push({type: 'deposit', amount: amount, timestamp: new Date()});
+                updateBalanceAndHistory();
+            } else {
+                alert("Invalid amount");
+            }
+        }
+
+        function transactionHistory() {
+            document.getElementById("transactions").classList.toggle("hidden");
+        }
+
+        function updateBalanceAndHistory(trans) {
+            const lang = languages[currentLangIndex];
+            const translations = {
+                en: { 
+                    balance: "Balance",
+                    withdrawText: "Withdraw",
+                    depositText: "Deposit"
+                },
+                kn: { 
+                    balance: "ಬ್ಯಾಲೆನ್ಸ್",
+                    withdrawText: "ಹಣ ತೆಗೆದುಕೊಳ್ಳಿ",
+                    depositText: "ಹಣ ಜಮೆ"
+                },
+                hi: { 
+                    balance: "शेष राशि",
+                    withdrawText: "निकासी",
+                    depositText: "जमा"
+                }
+            };
+            const currentTrans = trans || translations[lang];
+            
+            document.getElementById("balance").innerHTML = `<i class="fas fa-wallet"></i> ${currentTrans.balance}: $${balance}`;
+            
+            const transactionsDiv = document.getElementById("transactions");
+            transactionsDiv.innerHTML = '<div class="transactions-list">' + 
+                transactions.map(t => {
+                    const type = t.type === 'withdraw' ? currentTrans.withdrawText : currentTrans.depositText;
+                    const icon = t.type === 'withdraw' ? 
+                        '<i class="fas fa-money-bill-wave"></i>' : 
+                        '<i class="fas fa-piggy-bank"></i>';
+                    const className = t.type === 'withdraw' ? 
+                        'transaction-item transaction-withdraw' : 
+                        'transaction-item transaction-deposit';
+                    return `<div class="${className}">
+                        ${icon} ${type}: $${t.amount}
+                    </div>`;
+                }).reverse().join('') + 
+                '</div>';
+        }
+
+        function toggleMode() {
+            document.body.classList.toggle('dark-mode');
+            const icon = document.body.classList.contains('dark-mode') ? 
+                '<i class="fas fa-sun"></i> Toggle Light Mode' : 
+                '<i class="fas fa-moon"></i> Toggle Dark Mode';
+            document.getElementById('darkModeToggle').innerHTML = icon;
+        }
+
+        // Initialize tutorial video
+        changeTutorialLanguage();
+        let synth = window.speechSynthesis;
+        let isReading = false;
+
+        function getVoice() {
+            let voices = synth.getVoices();
+            return voices.length > 0 ? voices[0] : null;
+        }
+
+        // Function to get all visible text content
+        function getVisibleText() {
+            let textContent = '';
+            // Select all elements with text on the page
+            let elements = document.body.querySelectorAll('h1, h2, h3, h4, h5, h6, p, span, div, button');
+            
+            elements.forEach(el => {
+                if (el.innerText.trim() && el.offsetParent !== null) {  // Only include visible elements
+                    textContent += el.innerText.trim() + ' ';
+                }
+            });
+
+            return textContent;
+        }
+
+        // Function to read out all visible text
+        function readAllText() {
+            if (isReading) return;
+
+            let textContent = getVisibleText();
+
+            if (!textContent) {
+                alert("No visible text found to read!");
+                return;
+            }
+
+            let utterance = new SpeechSynthesisUtterance(textContent);
+
+            let voice = getVoice();
+            if (voice) utterance.voice = voice;
+
+            utterance.rate = 1.0;
+            utterance.pitch = 1.0;
+            utterance.volume = 1.0;
+
+            utterance.onstart = () => isReading = true;
+            utterance.onend = () => isReading = false;
+
+            synth.speak(utterance);
+        }
+
+        // Function to stop reading
+        function stopReading() {
+            synth.cancel();
+            isReading = false;
+        }
+
+        // Trigger reading when the button is clicked
+        document.getElementById("readButton").addEventListener("click", function () {
+            readAllText();
+        });
+
+        // Stop reading when stop button is clicked
+        document.getElementById("stopButton").addEventListener("click", function () {
+            stopReading();
+        });
+
+        // Wait for voices to load
+        window.speechSynthesis.onvoiceschanged = () => {
+            console.log("Voices loaded:", synth.getVoices());
+        };
+        
+    </script>
+</body>
+</html>

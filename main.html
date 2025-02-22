@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Dashboard</h1>
+        <div class="features">
+            <div class="feature" onclick="checkBalance()">
+                <img src="account_balance.png" alt="Account Balance" />
+                <p>Account Balance</p>
+            </div>
+            <div class="feature" onclick="transferFunds()">
+                <img src="transfer_money.png" alt="Transfer Money" />
+                <p>Pay/Transfer Money</p>
+            </div>
+            <div class="feature" onclick="viewTransactions()">
+                <img src="transaction_history.png" alt="Transaction History" />
+                <p>Transaction History</p>
+            </div>
+            <div class="feature" onclick="viewPassbook()">
+                <img src="virtual_passbook.png" alt="Virtual Passbook" />
+                <p>Virtual Passbook</p>
+            </div>
+            <div class="feature" onclick="aiAssistant()">
+                <img src="ai_assistant.png" alt="AI Assistant" />
+                <p>AI Assistant</p>
+            </div>
+            <div class="feature" onclick="openFD()">
+                <img src="fixed_deposit.png" alt="Fixed Deposit" />
+                <p>Fixed Deposit</p>
+            </div>
+            <div class="feature" onclick="viewAnnouncements()">
+                <img src="announcements.png" alt="Announcements" />
+                <p>Announcements</p>
+            </div>
+            <div class="feature" onclick="rechargeBills()">
+                <img src="recharge_bills.png" alt="Recharge/Bills" />
+                <p>Recharge/Bills</p>
+            </div>
+            <div class="feature" onclick="viewProfile()">
+                <img src="profile.png" alt="Profile" />
+                <p>Profile</p>
+            </div>
+            <div class="feature">
+                <img src="customer.png" alt="Customer Care" />
+                <p>+91123456789</p>
+            </div>
+        </div>
+        <button class="logout" onclick="logout()">Logout</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
